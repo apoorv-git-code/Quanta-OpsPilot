@@ -23,6 +23,9 @@ app.add_middleware(
 )
 
 # Define the expected incoming data from the frontend
+class ClinicalRequest(BaseModel):
+    criterion_query: str
+    patient_chart_excerpt: str
 class ChecklistItem(BaseModel):
     criterion: str
     met: bool
