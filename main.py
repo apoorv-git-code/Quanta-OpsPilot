@@ -106,3 +106,37 @@ async def evaluate_prior_auth(request: ClinicalRequest):
     
     # 4. Send the JSON straight to the Next.js frontend
     return json.loads(response.text)
+
+class NegotiationRequest(BaseModel):
+    shiftId: str
+    role: str
+    unit: str
+    basePay: float
+    currentBid: float
+    maxBid: float
+    strategy: str
+    candidate: str
+    kind: str
+    message: str | None = None
+
+@app.post("/api/negotiate")
+async def negotiate_shift(req: NegotiationRequest):
+    if req.kind == "bid":
+        will_fill = req.maxBid >= req.basePay + 5
+        reply = (
+            f"Accepted. Aligned with {req.strategy} strategy at ${req.maxBid}/hr."
+            if will_fill
+            else f"With {req.strategy} approach, ${req.maxBid}/hr is below current rate requirement."
+        )
+        return {
+            "nurse": req.candidate,
+            "willFill": will_fill,
+            "reply": reply,
+            "sentiment": "POSITIVE" if will_fill else "NEGATIVE"
+        }
+    return {
+        "nurse": req.candidate,
+        "willFill": None,
+        "reply": f"Understood. Adjusted strategy profile to {req.strategy}.",
+        "sentiment": "NEUTRAL"
+    }

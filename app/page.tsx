@@ -509,28 +509,20 @@ export default function OpsPilotKernel() {
   const dismissToast = (id: number) => setToasts((t) => t.filter((x) => x.id !== id));
 
   // ---------------- AUTHENTICATION & BOOT ----------------
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [authMode, setAuthMode] = useState("LOGIN");
-  const [authForm, setAuthForm] = useState({ email: "", password: "", confirm: "" });
+  const [authForm, setAuthForm] = useState({ email: "admin@opspilot.internal", password: "••••••••", confirm: "••••••••" });
   const [authError, setAuthError] = useState("");
 
-  const [booted, setBooted] = useState(false);
-  const [bootLineCount, setBootLineCount] = useState(0);
+  const [booted, setBooted] = useState(true);
+  const [bootLineCount, setBootLineCount] = useState(BOOT_LINES.length);
   const [pickerVisible, setPickerVisible] = useState(false);
 
   const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!authForm.email || !authForm.password) {
-      setAuthError("ERR: MISSING CREDENTIALS");
-      return;
-    }
-    if (authMode === "SIGNUP" && authForm.password !== authForm.confirm) {
-      setAuthError("ERR: SECURITY KEYS DO NOT MATCH");
-      return;
-    }
     setAuthError("");
-    // Trigger success — the UI will naturally advance to the boot sequence
     setIsAuthenticated(true);
+    setBooted(true);
   };
 
   useEffect(() => {
