@@ -1442,15 +1442,7 @@ export default function OpsPilotKernel() {
               <button onClick={() => setAppealOpen(false)} className="text-zinc-400 hover:text-zinc-700"><X size={15} /></button>
             </div>
             <div className="p-4">
-<<<<<<< HEAD
-              <textarea value={appealText} onChange={(e) => setAppealText(e.target.value)} rows={9} className={`w-full ${cn.bgInput} border ${cn.borderMain} rounded-lg p-3 text-[11px] ${cn.textMain} leading-relaxed font-mono focus:outline-none focus:border-indigo-600/50 resize-none`} />
-            </div>
-            <div className={`p-4 border-t ${cn.borderLight} flex justify-between items-center ${cn.bgMuted} rounded-b-xl`}>
-              <span className="text-[9.5px] text-zinc-500 font-mono">{appealSent ? "Status: TRANSMITTED (72h SLA)" : "Status: DRAFT"}</span>
-              <div className="flex gap-2">
-                <button onClick={() => setAppealOpen(false)} className="px-4 py-1.5 text-[10px] text-zinc-600 hover:text-zinc-900 border border-zinc-300 hover:border-zinc-400 rounded transition-colors bg-white">Close</button>
-                <button onClick={sendAppeal} disabled={appealSent} className="px-4 py-1.5 bg-indigo-600 text-white text-[10px] font-semibold rounded hover:bg-indigo-500 transition-colors disabled:opacity-50">{appealSent ? "Transmitted" : "Transmit"}</button>
-=======
+
               <textarea value={appealText} onChange={(e) => setAppealText(e.target.value)} disabled={appealLoading} rows={9} className={`w-full ${cn.bgInput} border ${cn.borderMain} rounded-lg p-3 text-[11px] ${cn.textMain} leading-relaxed font-mono focus:outline-none focus:border-indigo-600/50 resize-none disabled:opacity-60`} />
             </div>
             <div className={`p-4 border-t ${cn.borderLight} flex justify-between items-center ${cn.bgMuted} rounded-b-xl`}>
@@ -1488,8 +1480,4 @@ export default function OpsPilotKernel() {
       `}</style>
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/master
