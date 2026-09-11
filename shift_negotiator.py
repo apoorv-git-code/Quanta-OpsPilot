@@ -7,22 +7,56 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+<<<<<<< HEAD
+=======
+# pyrefly: ignore [missing-import]
+>>>>>>> origin/master
 from langgraph.graph import StateGraph, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 # =========================================================
+<<<<<<< HEAD
+=======
+# NOTE ON ARCHITECTURE
+# =========================================================
+# This is a SEPARATE service from main.py. main.py already exposes a simple
+# /api/negotiate endpoint that the dashboard's Staffing tab calls directly
+# for live bidding. This file is the LangGraph-based SMS/Twilio negotiation
+# demo (Section 4 of the working brief) — it's meant to be triggered
+# separately (e.g. via the Twilio webhook or the /api/v1/trigger-gap route),
+# not to replace main.py. Run it on its own port (see bottom of file) so the
+# two services don't collide.
+
+# =========================================================
+>>>>>>> origin/master
 # 1. LOAD API KEY FROM .env
 # =========================================================
 load_dotenv()
 
+<<<<<<< HEAD
 if not os.getenv("GOOGLE_API_KEY"):
     raise ValueError("GOOGLE_API_KEY not found in .env file")
+=======
+# FIX: main.py, verify_setup.py, and your .env all use GEMINI_API_KEY.
+# This file used to check for GOOGLE_API_KEY instead, which would raise
+# even when a valid key was set — renamed for consistency across the project.
+if not os.getenv("GEMINI_API_KEY"):
+    raise ValueError("GEMINI_API_KEY not found in .env file")
+>>>>>>> origin/master
 
 # =========================================================
 # 2. INITIALIZE GEMINI
 # =========================================================
+<<<<<<< HEAD
 llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-flash",
+=======
+# FIX: model name changed from gemini-1.5-flash to match the project spec
+# (gemini-2.5-flash), same model used everywhere else in the backend.
+llm = ChatGoogleGenerativeAI(
+    model="gemini-3.6-flash",
+    google_api_key=os.getenv("GEMINI_API_KEY"),
+>>>>>>> origin/master
     temperature=0
 )
 
@@ -126,7 +160,11 @@ async def chat_reply(request: ChatMessage):
     # Run AI Brain
     initial_state = {"messages": [incoming_msg], "intent": ""}
     final_state = opspilot_engine.invoke(initial_state)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> origin/master
     reply_text = final_state["messages"][-1]
     extracted_intent = final_state.get("intent", "")
 
@@ -151,4 +189,10 @@ async def chat_reply(request: ChatMessage):
 # =========================================================
 if __name__ == "__main__":
     import uvicorn
+<<<<<<< HEAD
     uvicorn.run("shift_negotiator:app", host="0.0.0.0", port=8000, reload=True)
+=======
+    # FIX: was port=8000, same as main.py — the two would collide if both run
+    # at once. This is a separate service, so it gets its own port.
+    uvicorn.run("shift_negotiator:app", host="0.0.0.0", port=8001, reload=True)
+>>>>>>> origin/master

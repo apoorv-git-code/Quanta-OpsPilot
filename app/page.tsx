@@ -55,7 +55,16 @@ const NEGOTIATION_API_URL =
   (typeof process !== "undefined" && process.env && process.env.NEXT_PUBLIC_NEGOTIATION_API_URL) ||
   "http://localhost:8000/api/negotiate";
 
+<<<<<<< HEAD
 const API_TIMEOUT_MS = 4000;
+=======
+const JUSTIFY_API_URL =
+  (typeof process !== "undefined" && process.env && process.env.NEXT_PUBLIC_JUSTIFY_API_URL) ||
+  "http://localhost:8000/api/v1/prior-auth/justify";
+
+const API_TIMEOUT_MS = 4000;
+const JUSTIFY_TIMEOUT_MS = 15000;
+>>>>>>> origin/master
 
 // ---------------------------------------------------------------------------
 // DATA
@@ -350,6 +359,30 @@ async function callNegotiationApi(payload: any) {
   }
 }
 
+<<<<<<< HEAD
+=======
+async function callJustifyApi(payload: any) {
+  const controller = new AbortController();
+  // Letter drafting is a slower LLM call than a negotiation ping, so it gets a longer timeout.
+  const timer = setTimeout(() => controller.abort(), JUSTIFY_TIMEOUT_MS);
+  try {
+    const res = await fetch(JUSTIFY_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    if (!res.ok) throw new Error(`API responded ${res.status}`);
+    const data = await res.json();
+    return { ok: true, data };
+  } catch (err) {
+    return { ok: false, error: err };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+>>>>>>> origin/master
 // ---------------------------------------------------------------------------
 // MAIN KERNEL Component
 // ---------------------------------------------------------------------------
@@ -570,6 +603,11 @@ export default function OpsPilotKernel() {
   const [appealOpen, setAppealOpen] = useState(false);
   const [appealText, setAppealText] = useState("");
   const [appealSent, setAppealSent] = useState(false);
+<<<<<<< HEAD
+=======
+  const [appealLoading, setAppealLoading] = useState(false);
+  const [appealSource, setAppealSource] = useState<"backend" | "local">("local");
+>>>>>>> origin/master
 
   const selectAudit = (audit: typeof INITIAL_AUDITS[0]) => {
     setSelectedAuditId(audit.id);
@@ -585,6 +623,7 @@ export default function OpsPilotKernel() {
 
   const requestPeerReview = () => pushToast(`Peer-to-peer review requested for ${selectedAudit.id}.`, "info");
 
+<<<<<<< HEAD
   const openAppeal = () => {
     setAppealSent(false);
     setAppealText(
@@ -593,6 +632,46 @@ export default function OpsPilotKernel() {
         `. We ask that the denial be reconsidered in light of the attached chart notes and current vitals (BP ${selectedPatient.vitals.bp}, SpO2 ${selectedPatient.vitals.spo2}%).`
     );
     setAppealOpen(true);
+=======
+  const buildLocalAppealDraft = () =>
+    `RE: Appeal — ${selectedAudit.type} (${selectedAudit.id})\nPatient: ${selectedPatient.name} · DOB ${selectedPatient.dob}\n\nThis request meets medical-necessity criteria based on the documented clinical history` +
+    (selectedPatient.history[0] ? ` (${selectedPatient.history[0].event}, ${selectedPatient.history[0].date})` : "") +
+    `. We ask that the denial be reconsidered in light of the attached chart notes and current vitals (BP ${selectedPatient.vitals.bp}, SpO2 ${selectedPatient.vitals.spo2}%).`;
+
+  const openAppeal = async () => {
+    setAppealSent(false);
+    setAppealOpen(true);
+    setAppealLoading(true);
+    setAppealText("Drafting letter from clinical reasoning agent...");
+
+    // The letter argues for the first unmet policy criterion on this audit.
+    const policyRows = POLICY_ROWS_BY_AUDIT[selectedAudit.id] ?? [];
+    const unmetRow = policyRows.find((r) => !r.match);
+
+    const patientChartExcerpt =
+      `Patient: ${selectedPatient.name}, DOB ${selectedPatient.dob}, ${selectedPatient.gender}. ` +
+      `Vitals: BP ${selectedPatient.vitals.bp}, SpO2 ${selectedPatient.vitals.spo2}%, Temp ${selectedPatient.vitals.temp}°F. ` +
+      `History: ${selectedPatient.history.map((h) => `${h.event} (${h.date})`).join("; ")}. ` +
+      `Medications: ${selectedPatient.medications.map((m) => `${m.name} ${m.dosage} ${m.frequency}`).join("; ")}.`;
+
+    const payload = {
+      patient_chart_excerpt: patientChartExcerpt,
+      unmet_criterion: unmetRow ? unmetRow.req : selectedAudit.type,
+      policy_context: unmetRow ? `${unmetRow.category}: ${unmetRow.req} — chart shows "${unmetRow.ext}"` : "General policy criteria for this audit type.",
+    };
+
+    const result: any = await callJustifyApi(payload);
+    setAppealLoading(false);
+
+    if (result.ok && result.data && result.data.draft_letter) {
+      setAppealSource("backend");
+      setAppealText(result.data.draft_letter);
+    } else {
+      setAppealSource("local");
+      setAppealText(buildLocalAppealDraft());
+      pushToast("Justification backend unavailable — showing local draft instead.", "warn");
+    }
+>>>>>>> origin/master
   };
 
   const sendAppeal = () => {
@@ -1363,6 +1442,7 @@ export default function OpsPilotKernel() {
               <button onClick={() => setAppealOpen(false)} className="text-zinc-400 hover:text-zinc-700"><X size={15} /></button>
             </div>
             <div className="p-4">
+<<<<<<< HEAD
               <textarea value={appealText} onChange={(e) => setAppealText(e.target.value)} rows={9} className={`w-full ${cn.bgInput} border ${cn.borderMain} rounded-lg p-3 text-[11px] ${cn.textMain} leading-relaxed font-mono focus:outline-none focus:border-indigo-600/50 resize-none`} />
             </div>
             <div className={`p-4 border-t ${cn.borderLight} flex justify-between items-center ${cn.bgMuted} rounded-b-xl`}>
@@ -1370,6 +1450,22 @@ export default function OpsPilotKernel() {
               <div className="flex gap-2">
                 <button onClick={() => setAppealOpen(false)} className="px-4 py-1.5 text-[10px] text-zinc-600 hover:text-zinc-900 border border-zinc-300 hover:border-zinc-400 rounded transition-colors bg-white">Close</button>
                 <button onClick={sendAppeal} disabled={appealSent} className="px-4 py-1.5 bg-indigo-600 text-white text-[10px] font-semibold rounded hover:bg-indigo-500 transition-colors disabled:opacity-50">{appealSent ? "Transmitted" : "Transmit"}</button>
+=======
+              <textarea value={appealText} onChange={(e) => setAppealText(e.target.value)} disabled={appealLoading} rows={9} className={`w-full ${cn.bgInput} border ${cn.borderMain} rounded-lg p-3 text-[11px] ${cn.textMain} leading-relaxed font-mono focus:outline-none focus:border-indigo-600/50 resize-none disabled:opacity-60`} />
+            </div>
+            <div className={`p-4 border-t ${cn.borderLight} flex justify-between items-center ${cn.bgMuted} rounded-b-xl`}>
+              <span className="text-[9.5px] text-zinc-500 font-mono flex items-center gap-1.5">
+                {appealSent ? "Status: TRANSMITTED (72h SLA)" : appealLoading ? "Status: DRAFTING..." : "Status: DRAFT"}
+                {!appealLoading && !appealSent && (
+                  <span className={`ml-1 px-1.5 py-0.5 rounded border text-[8px] ${appealSource === "backend" ? "text-emerald-700 border-emerald-600/30 bg-emerald-500/10" : "text-zinc-500 border-zinc-400/30 bg-zinc-500/10"}`}>
+                    {appealSource === "backend" ? "AI-drafted" : "local fallback"}
+                  </span>
+                )}
+              </span>
+              <div className="flex gap-2">
+                <button onClick={() => setAppealOpen(false)} className="px-4 py-1.5 text-[10px] text-zinc-600 hover:text-zinc-900 border border-zinc-300 hover:border-zinc-400 rounded transition-colors bg-white">Close</button>
+                <button onClick={sendAppeal} disabled={appealSent || appealLoading} className="px-4 py-1.5 bg-indigo-600 text-white text-[10px] font-semibold rounded hover:bg-indigo-500 transition-colors disabled:opacity-50">{appealSent ? "Transmitted" : "Transmit"}</button>
+>>>>>>> origin/master
               </div>
             </div>
           </div>
@@ -1392,4 +1488,8 @@ export default function OpsPilotKernel() {
       `}</style>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/master
