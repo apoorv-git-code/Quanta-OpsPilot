@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+*.env.local
+
+# ChromaDB
+chroma_db/
+
+# Build artifacts
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# Misc
+.DS_Store
+*.log
