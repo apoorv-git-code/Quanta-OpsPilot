@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "report_type": "serum_electrolyte_panel",
+  "patient_reference": "SIM-0427",
+  "patient_name": "Aarav Patel",
+  "specimen_collected_at": "2026-09-13T20:55:00+05:30",
+  "potassium_mEq_L": 5.7,
+  "creatinine_clearance_mL_min": 68,
+  "laboratory_flag": "HIGH",
+  "source": "Synthetic rural-clinic repeat laboratory report",
+  "comment": "Hackathon demonstration data only. Not for clinical use."
+}

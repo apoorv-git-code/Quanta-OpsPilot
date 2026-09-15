@@ -1,0 +1,8 @@
+{
+  "report_id": "DEMO-LAB-K-REPEAT",
+  "patient_id": "UKP189058",
+  "potassium_mEq_L": 5.4,
+  "creatinine_clearance_mL_min": 72,
+  "observed_at": "2026-09-12T10:15:00Z",
+  "synthetic": true
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">CareTrace</title>
+  <desc id="desc">A protective shield containing a clinical trace and verified endpoint.</desc>
+  <rect width="64" height="64" rx="16" fill="#08241d"/>
+  <path d="M32 5.5 53 13v17.2c0 13.3-8.4 23.8-21 29.2-12.6-5.4-21-15.9-21-29.2V13L32 5.5Z" fill="#0d4739" stroke="#75e0c1" stroke-width="2.15" stroke-linejoin="round"/>
+  <path d="M41.8 23.6a14.5 14.5 0 1 0 .2 16.5" fill="none" stroke="#f3fffb" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M17.5 33h8.1l3.4-7.3 5.3 15.2 4.2-8h8" fill="none" stroke="#48d7af" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="47.4" cy="32.9" r="2.8" fill="#f2b554" stroke="#09271f" stroke-width="1.4"/>
+</svg>

@@ -1,0 +1,11 @@
+Section 1. Hypertension Management and ACE Inhibitors
+When prescribing ACE inhibitors such as Lisinopril for hypertension management, clinicians must verify recent renal function and allergy history.
+A serum potassium level above 5.0 mEq/L or a creatinine clearance below 30 mL/min is a strict contraindication for Lisinopril.
+Additionally, Lisinopril is strictly contraindicated in patients with a documented allergy to ACE inhibitors or a history of angioedema.
+
+Section 2. Acute Respiratory Infection Follow-up
+For patients presenting with acute respiratory symptoms and SpO2 below 94%, supplemental oxygen and immediate imaging (Chest X-Ray) are required.
+Routine antibiotic prescription for viral bronchitis is not recommended unless a secondary bacterial infection is confirmed via sputum culture or prolonged fever over 101.5°F for more than 48 hours.
+
+Section 3. Clinical Documentation Requirements
+All follow-up records must explicitly document the patient's current vital signs, the primary diagnosed condition, reconciled medications, and a specific follow-up timeline. Any contraindications encountered during the consultation must be flagged as an 'ESCALATION' for attending physician review.
